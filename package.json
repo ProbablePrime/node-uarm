@@ -1,0 +1,17 @@
+{
+  "name": "node-uarm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "chai": "^3.5.0",
+    "joi": "^9.0.4",
+    "serialport": "^4.0.1"
+  }
+}
