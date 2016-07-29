@@ -16,7 +16,7 @@ describe('command', () => {
 
   it('validates a schema using joi', () => {
     const command = new Command('');
-    command.setSchema(Joi.array().items(Joi.number().required()));
+    command.setSchema(["PIN"]);
     expect(command.validate().error).to.not.be.null
     command.addArgument(1);
     expect(command.validate().error).to.be.null
@@ -24,6 +24,7 @@ describe('command', () => {
 
   it('builds itself into a valid array for encoding', () => {
     const command = new Command(0x1E);
+    command.setSchema(["PIN"]);
     command.addArgument(1);
     expect(command.build()).to.deep.equal([0xF0, 0xAA, 0x1E, 1, 0xF7]);
   });

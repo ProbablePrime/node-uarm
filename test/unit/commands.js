@@ -13,8 +13,8 @@ describe('command compiler', () => {
     expect(_.every(commands, command => typeof command === 'function')).to.be.ok;
   });
   it('creates a valid command object when a factory function is used', () => {
-    const command = commands.DETACH_SERVO();
-    expect(command.code).to.equal(constants.command.DETACH_SERVO);
+    const command = commands.WRITE_ANGLE();
+    expect(command.code).to.equal(constants.command.WRITE_ANGLE);
     expect(command.schema).to.not.be.null;
   })
 });
