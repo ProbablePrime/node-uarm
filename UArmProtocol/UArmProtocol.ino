@@ -27,6 +27,9 @@
 
 #define UARM_CODE                   (0XAA)
 
+//Sent when the board is ready, NOT on the firmata protocl
+#define READY_CODE                  (0x01)
+
 #define READ_ANGLE                  (0X10)
 #define WRITE_ANGLE                 (0X11)
 #define READ_COORDS                 (0X12)
@@ -61,8 +64,8 @@ int sysexBytesRead;
 void setup()
 {
   Serial.begin(57600);
-  Serial.write("HELLO\n");
   uarm.init();
+  sendReady();
 }
 
 void loop()
@@ -71,6 +74,13 @@ void loop()
     processInput();
 }
 
+
+void sendReady() {
+   Serial.write(START_SYSEX);
+   Serial.write(UARM_CODE);
+   Serial.write(READY_CODE);
+   Serial.write(END_SYSEX);
+}
 
 boolean handleSysex(byte command, byte argc, byte *argv)
 {
@@ -87,6 +97,7 @@ boolean handleSysex(byte command, byte argc, byte *argv)
             boolean withOffset = argv[2]; // if servo_offset = 0 there is offset inside
             Serial.write(START_SYSEX);
             Serial.write(UARM_CODE);
+            Serial.write(READ_ANGLE);
             Serial.write(servo_num);
             float angle = uarm.read_servo_angle(servo_num,withOffset);
             sendFloatAsThree7bitBytes(angle);
@@ -366,7 +377,6 @@ boolean handleSysex(byte command, byte argc, byte *argv)
 }
 void processInput(void)
 {
-    Serial.write("PROCESSING\n");
     int inputData = Serial.read();
     if (inputData != -1) {
       parse(inputData);
@@ -377,7 +387,6 @@ void parse(byte inputData)
 {
     int command;
     if (parsingSysex) {
-      Serial.write("parsing sysex");
       if (inputData == END_SYSEX) {
           //stop sysex byte
           parsingSysex = false;
@@ -390,7 +399,6 @@ void parse(byte inputData)
       }
     }
     else {
-        Serial.write("something else\n");
         // remove channel info from command byte if less than 0xF0
         if (inputData < 0xF0) {
           command = inputData & 0xF0;
