@@ -14,5 +14,11 @@
     "cqnc": "^0.1.0",
     "joi": "^9.0.4",
     "serialport": "^4.0.1"
+  },
+  "devDependencies": {
+    "xo": "^0.16.0"
+  },
+  "xo": {
+    "esnext": true
   }
 }
